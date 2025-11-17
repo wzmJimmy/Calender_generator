@@ -4,60 +4,26 @@
     return;
   }
 
-  const appState = {
-    year: Utils.clampYear(Utils.getCurrentYear()),
-    startDay: "sunday",
-    language: "en",
-    country: "US",
-  };
-
   function init() {
     CalendarEngine.init();
     ImageHandler.init();
     HolidayService.init();
     PdfGenerator.init();
-    hydrateForm();
-    bindEvents();
+    ConfigForm?.init?.();
+    bindNavigation();
     runDependencyCheck();
   }
 
-  function hydrateForm() {
-    const yearInput = Utils.qs("#year-input");
-    const startDaySelect = Utils.qs("#start-day");
-    const languageSelect = Utils.qs("#language");
-    const countrySelect = Utils.qs("#country");
-
-    if (yearInput) yearInput.value = appState.year;
-    if (startDaySelect) startDaySelect.value = appState.startDay;
-    if (languageSelect) languageSelect.value = appState.language;
-    if (countrySelect) countrySelect.value = appState.country;
-  }
-
-  function bindEvents() {
-    const form = Utils.qs(".form");
+  function bindNavigation() {
     const nextBtn = Utils.qs("#next-step");
     const downloadBtn = Utils.qs("#download-btn");
 
-    form?.addEventListener("input", handleInputChange);
     nextBtn?.addEventListener("click", () => {
       console.info("Step navigation coming soon.");
     });
     downloadBtn?.addEventListener("click", () => {
       PdfGenerator.downloadDraft();
     });
-  }
-
-  function handleInputChange(event) {
-    const target = event.target;
-    if (!target.name) return;
-    const { name, value } = target;
-    if (name === "year") {
-      appState.year = Utils.clampYear(Number(value) || appState.year);
-      target.value = appState.year;
-    } else {
-      appState[name] = value;
-    }
-    console.debug("[AppState]", appState);
   }
 
   function runDependencyCheck() {

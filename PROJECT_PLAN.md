@@ -65,28 +65,36 @@ calendar_generator/
 ### Phase 2: Step 1 - Calendar Configuration
 
 #### Step 2.1: Year Selection
-- [ ] Create year input (dropdown or number input)
-- [ ] Default to current year
-- [ ] Validate year range (e.g., 2020-2030)
-- [ ] Store selected year in application state
+- [x] Create year input (dropdown or number input)
+- [x] Default to current year
+- [x] Validate year range (e.g., 2020-2030)
+- [x] Store selected year in application state
 
 #### Step 2.2: Start Day of Week
-- [ ] Create dropdown for start day (Sunday, Monday, etc.)
-- [ ] Options: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
-- [ ] Default to Sunday (or user's locale default)
-- [ ] Store selection in application state
+- [x] Create dropdown for start day (Sunday, Monday, etc.)
+- [x] Options: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+- [x] Default to Sunday (or user's locale default)
+- [x] Store selection in application state
 
 #### Step 2.3: Language Selection
-- [ ] Create language dropdown
-- [ ] Support: English, Spanish, French, German, Chinese, Japanese, etc.
-- [ ] Store language code (en, es, fr, de, zh, ja, etc.)
-- [ ] This will affect month names and day names
+- [x] Create language dropdown
+- [x] Support: English, Spanish, French, German, Chinese, Japanese, etc.
+- [x] Store language code (en, es, fr, de, zh, ja, etc.)
+- [x] This will affect month names and day names
+- [x] Auto-detect default language from selected country with manual override
 
 #### Step 2.4: Country/Region Selection
-- [ ] Create country dropdown
-- [ ] Support major countries (US, UK, Canada, Australia, Germany, France, etc.)
-- [ ] Store country code for holiday API
-- [ ] Link to holiday data source
+- [x] Create country dropdown
+- [x] Support major countries (US, UK, Canada, Australia, Germany, France, etc.)
+- [x] Store country code for holiday API
+- [x] Link to holiday data source
+- [x] Maintain shared localization metadata in `js/localization-data.js`
+
+#### Step 2.5: Shared Configuration Module
+- [x] Move form input handling and validation into `js/config-form.js`
+- [x] Dynamically render country/language select options from the shared dataset
+- [x] Expose config state for downstream modules (calendar, PDF, holidays)
+- [x] Add lightweight DOM simulation tests to lock down validation and auto-detect behavior
 
 ### Phase 3: Step 2 - Image Upload
 

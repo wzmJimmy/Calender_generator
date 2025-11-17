@@ -150,6 +150,34 @@ img {
   color: var(--muted);
 }
 
+.field__hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  min-height: 1em;
+}
+
+.field__hint--info {
+  color: var(--primary-dark);
+}
+
+.field__hint--warning {
+  color: #b54708;
+}
+
+.field__hint--success {
+  color: #107569;
+}
+
+.field--error input,
+.field--error select {
+  border-color: #d92d20;
+  box-shadow: 0 0 0 1px rgba(217, 45, 32, 0.1);
+}
+
+.field--error .field__hint {
+  color: #b42318;
+}
+
 .field input,
 .field select {
   padding: 0.85rem 1rem;
