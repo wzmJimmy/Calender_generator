@@ -12,7 +12,7 @@ A web-based application that allows users to generate personalized calendar PDFs
 - **jsPDF**: PDF generation library
 - **html2canvas**: Convert HTML to canvas for PDF (used with jsPDF)
 - **date-fns**: Date manipulation and calendar calculations
-- **@date-holidays/core**: Holiday data for different countries/regions
+- **@date-holidays**: Holiday data for different countries/regions
 
 ### Alternative Libraries (if needed)
 - **pdfkit.js**: Alternative PDF generation
@@ -48,19 +48,19 @@ calendar_generator/
 ### Phase 1: Project Setup & Basic Structure
 
 #### Step 1.1: Initialize Project
-- [ ] Create directory structure
-- [ ] Set up basic HTML5 boilerplate
-- [ ] Include CDN links for libraries (jsPDF, html2canvas, date-fns, @date-holidays/core)
-- [ ] Create basic CSS reset and layout structure
-- [ ] Set up JavaScript module structure
+- [x] Create directory structure
+- [x] Set up basic HTML5 boilerplate
+- [x] Include CDN links for libraries (jsPDF, html2canvas, date-fns, date-holidays)
+- [x] Create basic CSS reset and layout structure
+- [x] Set up JavaScript module structure
 
 #### Step 1.2: Basic UI Layout
-- [ ] Create header section
-- [ ] Design multi-step form container
-- [ ] Create step indicators (Step 1, 2, 3)
-- [ ] Add navigation buttons (Next/Previous)
-- [ ] Design preview section
-- [ ] Add download button area
+- [x] Create header section
+- [x] Design multi-step form container
+- [x] Create step indicators (Step 1, 2, 3)
+- [x] Add navigation buttons (Next/Previous)
+- [x] Design preview section
+- [x] Add download button area
 
 ### Phase 2: Step 1 - Calendar Configuration
 
@@ -317,11 +317,11 @@ calendar_generator/
 <!-- html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<!-- date-fns -->
-<script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+<!-- date-fns (global browser build) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/4.1.0/cdn.min.js"></script>
 
-<!-- @date-holidays/core -->
-<script src="https://cdn.jsdelivr.net/npm/@date-holidays/core@latest/dist/index.umd.js"></script>
+<!-- date-holidays (UMD build) -->
+<script src="https://unpkg.com/date-holidays@3/dist/umd.min.js"></script>
 ```
 
 ### Alternative: npm packages (if using build tool)
@@ -330,11 +330,13 @@ calendar_generator/
   "dependencies": {
     "jspdf": "^2.5.1",
     "html2canvas": "^1.4.1",
-    "date-fns": "^2.29.3",
-    "@date-holidays/core": "^1.0.0"
+    "date-fns": "^4.1.0",
+    "date-holidays": "^3.0.0"
   }
 }
 ```
+
+> **Phase 1 note:** We verified that `date-holidays` maintains the browser-ready bundle under the main package (not `@date-holidays/core`), so future holiday logic should import from `date-holidays` to stay aligned with upstream support.
 
 ## Timeline Estimate
 
