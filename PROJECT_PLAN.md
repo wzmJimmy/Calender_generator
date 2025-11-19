@@ -99,28 +99,86 @@ calendar_generator/
 ### Phase 3: Step 2 - Image Upload
 
 #### Step 3.1: Image Upload Interface
-- [ ] Create 12 upload slots (one per month)
-- [ ] Each slot shows:
+- [x] Create 12 upload slots (one per month)
+- [x] Each slot shows:
   - Month name
   - Upload button/area
   - Preview thumbnail (when uploaded)
   - Remove/replace button
-- [ ] Support drag-and-drop for each slot
-- [ ] Validate file types (jpg, jpeg, png, webp)
-- [ ] Validate file size (max 5MB per image)
-- [ ] Show upload progress if needed
+- [x] Support drag-and-drop for each slot
+- [x] Validate file types (jpg, jpeg, png, webp)
+- [x] Validate file size (max 5MB per image)
+- [x] Show upload progress if needed
 
 #### Step 3.2: Default Images
-- [ ] Create 12 default placeholder images
-- [ ] Store in assets/default-images/
-- [ ] Use default if user doesn't upload for that month
-- [ ] Allow user to see and use defaults easily
+- [x] Create 12 default placeholder images (SVG artwork with monthly themes)
+- [x] Store in assets/default-images/
+- [x] Use default if user doesn't upload for that month
+- [x] Allow user to see and use defaults easily
 
 #### Step 3.3: Image Storage
-- [ ] Store uploaded images in browser memory (as base64 or Blob URLs)
-- [ ] Create image state management (array of 12 images)
-- [ ] Handle image replacement
-- [ ] Optimize images for PDF (resize if too large)
+- [x] Store uploaded images in browser memory (as base64 data URLs)
+- [x] Create image state management (array of 12 images)
+- [x] Handle image replacement
+- [x] Optimize images for PDF (resize if too large, compress with quality 0.82)
+- [x] Apply compression before encoding (max edge 1800px, JPEG format)
+
+### Phase 3b: Step-by-Step Navigation & Real-Time Configuration
+
+#### Step 3b.1: Independent Configuration Panel
+- [ ] Extract configuration form to a persistent top section
+- [ ] Make config panel always visible (sticky or fixed position)
+- [ ] Ensure config changes reflect immediately in preview/PDF
+- [ ] Add visual indicator when config is modified
+- [ ] Style config panel to be distinct from step content
+
+#### Step 3b.2: Step Navigation System
+- [ ] Implement step state management (current step tracking)
+- [ ] Create step visibility logic (show only current step)
+- [ ] Add step transition animations/effects
+- [ ] Update step indicators to reflect current position
+- [ ] Handle step validation before allowing progression
+
+#### Step 3b.3: Step 1 - Configuration (Standalone)
+- [ ] Move config form to top section (independent of step flow)
+- [ ] Keep config accessible at all times
+- [ ] Wire config changes to trigger preview/PDF updates
+- [ ] Add "Apply Changes" or auto-save indicator
+
+#### Step 3b.4: Step 2 - Image Upload
+- [ ] Show image upload panel only when on Step 2
+- [ ] Add navigation buttons (Previous/Next)
+- [ ] Validate that at least default images are available
+- [ ] Allow skipping if user is satisfied with defaults
+
+#### Step 3b.5: Step 3 - Preview
+- [ ] Show preview section only when on Step 3
+- [ ] Generate preview based on current config and images
+- [ ] Update preview automatically when config changes (from top panel)
+- [ ] Add navigation buttons (Previous/Next)
+- [ ] Show download button when ready
+
+#### Step 3b.6: Step 4 - Download (Final Step)
+- [ ] Show download section or modal
+- [ ] Generate PDF with current settings
+- [ ] Show download progress
+- [ ] Allow returning to previous steps to make changes
+- [ ] Add "Generate New Calendar" option to start over
+
+#### Step 3b.7: Navigation Controls
+- [ ] Implement Previous/Next buttons with proper state
+- [ ] Disable Previous on first step
+- [ ] Disable Next on last step
+- [ ] Add step validation before allowing Next
+- [ ] Show step completion indicators
+- [ ] Add keyboard navigation (optional)
+
+#### Step 3b.8: Real-Time Updates
+- [ ] Subscribe config changes to preview/PDF generators
+- [ ] Debounce rapid config changes for performance
+- [ ] Show loading state during preview regeneration
+- [ ] Handle errors gracefully during real-time updates
+- [ ] Cache intermediate results when possible
 
 ### Phase 4: Calendar Generation Logic
 
@@ -350,6 +408,7 @@ calendar_generator/
 
 - **Phase 1-2**: 2-3 hours (Setup & Configuration)
 - **Phase 3**: 2-3 hours (Image Upload)
+- **Phase 3b**: 2-3 hours (Step-by-Step Navigation & Real-Time Config)
 - **Phase 4**: 3-4 hours (Calendar Logic)
 - **Phase 5**: 3-4 hours (PDF Generation)
 - **Phase 6**: 2-3 hours (Preview)
@@ -357,17 +416,20 @@ calendar_generator/
 - **Phase 8**: 1 hour (Download)
 - **Phase 9**: 2-3 hours (Polish)
 
-**Total Estimated Time**: 16-23 hours for MVP
+**Total Estimated Time**: 18-26 hours for MVP
 
 ## Success Criteria
 
-- [ ] User can select year, start day, language, and country
-- [ ] User can upload 12 images (or use defaults)
+- [x] User can select year, start day, language, and country
+- [x] User can upload 12 images (or use defaults)
+- [x] Images are validated and compressed before storage
 - [ ] Calendar correctly displays with holidays
 - [ ] Preview shows accurate representation
 - [ ] PDF generates correctly with all 12 months
 - [ ] User can download PDF
 - [ ] User can replace individual images
+- [ ] Step-by-step navigation works smoothly
+- [ ] Configuration changes reflect in real-time
 - [ ] Application works in major browsers
 - [ ] Code is well-organized and maintainable
 

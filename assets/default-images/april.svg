@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="aprilGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#aprilGradient)" />
+  <rect x="140" y="180" width="240" height="400" rx="40" fill="rgba(59, 130, 246, 0.35)" />
+  <rect x="820" y="140" width="240" height="440" rx="40" fill="rgba(240, 249, 255, 0.2)" />
+  <text x="600" y="360" text-anchor="middle" font-size="120" fill="#f8fafc" font-family="Inter, Arial, sans-serif">
+    April
+  </text>
+  <text x="600" y="460" text-anchor="middle" font-size="48" fill="#e0f2fe" font-family="Inter, Arial, sans-serif">
+    Gentle Showers
+  </text>
+</svg>
+

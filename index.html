@@ -97,6 +97,25 @@
           <button type="button" class="btn primary" id="next-step">Next</button>
         </div>
       </form>
+
+      <section class="image-panel" aria-label="Monthly image uploads">
+        <header class="image-panel__header">
+          <div>
+            <p class="eyebrow">Step 2 · Images</p>
+            <h2>Upload artwork for every month</h2>
+            <p class="muted">
+              Drag & drop high-quality JPG, PNG, or WebP files (max 5MB each) or stick with the curated defaults.
+            </p>
+          </div>
+          <button type="button" class="btn secondary" id="reset-images">
+            Reset to defaults
+          </button>
+        </header>
+        <div class="image-panel__summary" id="image-summary" aria-live="polite">
+          All 12 months are currently using the default artwork set.
+        </div>
+        <div class="image-grid" id="image-grid" aria-live="polite"></div>
+      </section>
     </section>
 
     <section class="preview">

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="juneGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#0ea5e9" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#juneGradient)" />
+  <path
+    d="M0,520 Q150,480 300,520 T600,520 T900,520 T1200,520 L1200,800 L0,800 Z"
+    fill="rgba(255, 255, 255, 0.35)"
+  />
+  <circle cx="240" cy="220" r="100" fill="rgba(255, 255, 255, 0.2)" />
+  <text x="600" y="360" text-anchor="middle" font-size="120" fill="#f0f9ff" font-family="Inter, Arial, sans-serif">
+    June
+  </text>
+  <text x="600" y="460" text-anchor="middle" font-size="48" fill="#e0f2fe" font-family="Inter, Arial, sans-serif">
+    Ocean Breezes
+  </text>
+</svg>
+

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="februaryGradient" x1="0" y1="0" x2="1" y2="0.8">
+      <stop offset="0%" stop-color="#be185d" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#februaryGradient)" />
+  <path
+    d="M300,360 C300,300 360,260 420,280 C460,220 560,220 600,300 C640,220 740,220 780,280 C840,260 900,300 900,360 C900,480 600,620 600,620 C600,620 300,480 300,360 Z"
+    fill="rgba(255,255,255,0.25)"
+  />
+  <text x="600" y="360" text-anchor="middle" font-size="120" fill="#fff9f5" font-family="Inter, Arial, sans-serif">
+    February
+  </text>
+  <text x="600" y="460" text-anchor="middle" font-size="48" fill="#fff7ed" font-family="Inter, Arial, sans-serif">
+    Cozy Moments
+  </text>
+</svg>
+

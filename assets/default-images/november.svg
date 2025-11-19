@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="novemberGradient" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#novemberGradient)" />
+  <circle cx="260" cy="300" r="160" fill="rgba(255, 255, 255, 0.15)" />
+  <circle cx="880" cy="520" r="190" fill="rgba(148, 163, 184, 0.18)" />
+  <text x="600" y="360" text-anchor="middle" font-size="120" fill="#e2e8f0" font-family="Inter, Arial, sans-serif">
+    November
+  </text>
+  <text x="600" y="460" text-anchor="middle" font-size="48" fill="#cbd5f5" font-family="Inter, Arial, sans-serif">
+    Cozy Twilight
+  </text>
+</svg>
+
