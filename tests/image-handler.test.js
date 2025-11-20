@@ -2,6 +2,12 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
+function loadScript(relativePath, sandbox) {
+  const scriptPath = path.join(__dirname, "..", relativePath);
+  const code = fs.readFileSync(scriptPath, "utf8");
+  vm.runInNewContext(code, sandbox, { filename: relativePath });
+}
+
 const sandboxWindow = {
   document: {},
   CustomEvent: function CustomEvent(type, detail) {
@@ -18,9 +24,8 @@ const sandbox = {
   clearTimeout,
 };
 
-const handlerPath = path.join(__dirname, "..", "js", "image-handler.js");
-const handlerCode = fs.readFileSync(handlerPath, "utf8");
-vm.runInNewContext(handlerCode, sandbox, { filename: "image-handler.js" });
+loadScript("js/utils.js", sandbox);
+loadScript("js/image-handler.js", sandbox);
 
 const internals = sandbox.window.ImageHandler._internals;
 

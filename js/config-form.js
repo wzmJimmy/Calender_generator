@@ -29,9 +29,9 @@
   };
 
   const subscribers = new Set();
-  let debounceTimer = null;
   let configPanelEl;
   let configIndicatorEl;
+  let notifySubscribersDebounced;
 
   function init() {
     configPanelEl = Utils.qs(".config-panel");
@@ -130,16 +130,6 @@
     }
   }
 
-  function notifySubscribersDebounced() {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
-    }
-
-    debounceTimer = setTimeout(() => {
-      notifySubscribers();
-    }, 300); // 300ms debounce
-  }
-
   function notifySubscribers() {
     const state = { ...appState };
     subscribers.forEach((callback) => {
@@ -150,6 +140,9 @@
       }
     });
   }
+
+  // Initialize debounced version after notifySubscribers is defined
+  notifySubscribersDebounced = Utils.debounce(notifySubscribers, 300);
 
   function normalizeYear(inputValue) {
     const fallback = appState.year || Utils.getCurrentYear();

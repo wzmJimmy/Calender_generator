@@ -190,32 +190,67 @@ calendar_generator/
 ### Phase 4: Calendar Generation Logic
 
 #### Step 4.1: Calendar Calculation
-- [ ] Create function to generate calendar grid for a month
-- [ ] Handle different start days of week
-- [ ] Calculate correct number of days per month
-- [ ] Handle leap years
-- [ ] Generate array of dates with proper positioning
+- [x] Create function to generate calendar grid for a month
+- [x] Handle different start days of week
+- [x] Calculate correct number of days per month
+- [x] Handle leap years
+- [x] Generate array of dates with proper positioning
 
 #### Step 4.2: Holiday Integration
-- [ ] Integrate holiday library (@date-holidays/core)
-- [ ] Fetch holidays for selected country and year
-- [ ] Mark holidays in calendar
-- [ ] Display holiday names (in selected language if possible)
-- [ ] Handle multiple holidays on same day
+- [x] Integrate holiday library (@date-holidays)
+- [x] Fetch holidays for selected country and year
+- [x] Mark holidays in calendar
+- [x] Display holiday names (in selected language if possible)
+- [x] Handle multiple holidays on same day
 
 #### Step 4.3: Localization
-- [ ] Create translation object for month names
-- [ ] Create translation object for day names
-- [ ] Apply selected language to calendar
-- [ ] Format dates according to locale
+- [x] Create translation object for month names
+- [x] Create translation object for day names
+- [x] Apply selected language to calendar
+- [x] Format dates according to locale
 
 #### Step 4.4: Calendar Rendering
-- [ ] Create HTML structure for calendar month
-- [ ] Style calendar grid (7 columns, variable rows)
-- [ ] Highlight current day (if applicable)
-- [ ] Style holidays differently
-- [ ] Add month name header
-- [ ] Ensure responsive design
+- [x] Create HTML structure for calendar month
+- [x] Style calendar grid (7 columns, variable rows)
+- [x] Highlight current day (if applicable)
+- [x] Style holidays differently
+- [x] Add month name header
+- [x] Ensure responsive design
+
+#### Additional Enhancements (Beyond Original Plan)
+- [x] Refactored common utility functions into `utils.js` for code reuse:
+  - `formatISODate()` - Centralized ISO date formatting (YYYY-MM-DD) used by calendar and holiday modules
+  - `formatBytes()` - Human-readable byte formatting (B, KB, MB, GB) for file size display
+  - `preventDefault()` - Event handling utility for drag-and-drop operations
+  - `chunkArray()` - Array chunking utility for calendar week grouping
+  - `debounce()` - Generic debounce function for config change notifications
+- [x] Updated all modules to use shared utilities, eliminating code duplication:
+  - `calendar.js` now uses `Utils.formatISODate()` and `Utils.chunkArray()`
+  - `holiday-data.js` now uses `Utils.formatISODate()`
+  - `image-handler.js` now uses `Utils.formatBytes()` and `Utils.preventDefault()`
+  - `config-form.js` now uses `Utils.debounce()` for subscriber notifications
+- [x] Improved test infrastructure by ensuring proper dependency loading order
+- [x] Enhanced code maintainability through DRY (Don't Repeat Yourself) principles
+
+### Phase 4b: Preview Calendar Experience
+
+#### Step 4b.1: Calendar Preview Rendering
+- [ ] Replace preview placeholders with actual calendar output from `CalendarEngine.renderMonth`
+- [ ] Mirror PDF layout structure to guarantee parity between preview and generated pages
+
+#### Step 4b.2: Preview Pagination & Controls
+- [ ] Add prev/next controls with disabled states at bounds
+- [ ] Provide quick jump (dropdown or selector) to any month
+- [ ] Persist pagination state when navigating between steps
+
+#### Step 4b.3: Preview Data Wiring
+- [ ] Sync preview with config changes (year, locale, holidays) without page reload
+- [ ] Inject month-specific images above each calendar using shared rendering helpers
+- [ ] Debounce re-rendering to keep interactions smooth
+
+#### Step 4b.4: Preview Testing
+- [ ] Add lightweight DOM tests to verify pagination updates current month
+- [ ] Validate that preview reuses CalendarEngine markup for fidelity
 
 ### Phase 5: PDF Generation
 

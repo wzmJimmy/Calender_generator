@@ -29,9 +29,13 @@
   let summaryEl;
   let resetBtn;
 
+  if (!window.Utils) {
+    console.error("[ImageHandler] Utils module missing.");
+  }
+  const Utils = window.Utils || {};
+
   function init() {
     if (!window.Utils) {
-      console.error("[ImageHandler] Utils module missing.");
       return;
     }
     gridEl = Utils.qs("#image-grid");
@@ -176,12 +180,12 @@
     slot.elements = elements;
 
     elements.dropzone.addEventListener("dragenter", (event) => {
-      preventDefault(event);
+      Utils.preventDefault(event);
       elements.dropzone.classList.add("is-dragging");
     });
 
     elements.dropzone.addEventListener("dragover", (event) => {
-      preventDefault(event);
+      Utils.preventDefault(event);
     });
 
     elements.dropzone.addEventListener("dragleave", () => {
@@ -189,7 +193,7 @@
     });
 
     elements.dropzone.addEventListener("drop", (event) => {
-      preventDefault(event);
+      Utils.preventDefault(event);
       elements.dropzone.classList.remove("is-dragging");
       const file = event.dataTransfer?.files?.[0];
       if (file) {
@@ -232,10 +236,6 @@
     });
   }
 
-  function preventDefault(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
 
   function processFile(slot, file) {
     const validation = validateFile(file);
@@ -260,7 +260,7 @@
           height: result.height,
           name: file.name,
         };
-        slot.status = `Loaded ${file.name} (${formatBytes(result.size)})`;
+        slot.status = `Loaded ${file.name} (${Utils.formatBytes(result.size)})`;
         slot.elements.preview.src = slot.asset.dataUrl;
         slot.elements.badge.textContent = "Custom";
         slot.elements.dropzone.classList.remove("is-dragging");
@@ -287,7 +287,7 @@
     if (file.size > MAX_FILE_SIZE) {
       return {
         valid: false,
-        message: `File too large (${formatBytes(file.size)}). Max size is ${formatBytes(MAX_FILE_SIZE)}.`,
+        message: `File too large (${Utils.formatBytes(file.size)}). Max size is ${Utils.formatBytes(MAX_FILE_SIZE)}.`,
       };
     }
 
@@ -364,13 +364,6 @@
     };
   }
 
-  function formatBytes(bytes) {
-    if (!bytes) return "0 B";
-    const units = ["B", "KB", "MB"];
-    const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-    const value = bytes / Math.pow(1024, exponent);
-    return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`;
-  }
 
   function setStatus(slot, message, variant = "muted") {
     slot.status = message;
@@ -503,7 +496,6 @@
     MAX_FILE_SIZE,
     MAX_EDGE,
     validateFile,
-    formatBytes,
     calculateResizeDimensions,
     manifest: MONTH_MANIFEST.map((entry) => ({ ...entry })),
     getDefaultPathForKey(key) {
