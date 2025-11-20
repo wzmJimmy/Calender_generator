@@ -21,6 +21,7 @@
   <script src="js/pdf-generator.js" defer></script>
   <script src="js/holiday-data.js" defer></script>
   <script src="js/config-form.js" defer></script>
+  <script src="js/step-navigation.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -29,30 +30,15 @@
       <p class="eyebrow">Build Your Calendar</p>
       <h1>Calendar PDF Generator</h1>
       <p>Create personalized calendar PDFs with custom images, holidays, and localization.</p>
+      <div id="dependency-status" class="hero__status" role="status" aria-live="polite">
+        Checking library dependencies...
+      </div>
     </div>
   </header>
 
   <main class="app-container">
-    <section class="configuration" aria-label="Calendar setup">
-      <div class="stepper" aria-label="Setup steps">
-        <div class="step active" aria-current="step">
-          <div class="step__index" aria-hidden="true">1</div>
-          <p class="step__label">Configure</p>
-        </div>
-        <div class="step">
-          <div class="step__index" aria-hidden="true">2</div>
-          <p class="step__label">Images</p>
-        </div>
-        <div class="step">
-          <div class="step__index" aria-hidden="true">3</div>
-          <p class="step__label">Preview</p>
-        </div>
-      </div>
-
-      <div id="dependency-status" class="status-banner" role="status" aria-live="polite">
-        Checking library dependencies...
-      </div>
-
+    <!-- Calendar Settings Panel (Persistent, above steps) -->
+    <section class="config-panel" aria-label="Calendar settings">
       <form class="form" aria-labelledby="config-heading">
         <h2 id="config-heading">Calendar Settings</h2>
         <div class="form__grid">
@@ -91,64 +77,124 @@
             <span class="field__hint" id="language-hint" aria-live="polite"></span>
           </label>
         </div>
-
-        <div class="form__actions">
-          <button type="button" class="btn ghost" disabled>Previous</button>
-          <button type="button" class="btn primary" id="next-step">Next</button>
-        </div>
+        <div class="config-panel__indicator" id="config-indicator" aria-live="polite"></div>
       </form>
-
-      <section class="image-panel" aria-label="Monthly image uploads">
-        <header class="image-panel__header">
-          <div>
-            <p class="eyebrow">Step 2 · Images</p>
-            <h2>Upload artwork for every month</h2>
-            <p class="muted">
-              Drag & drop high-quality JPG, PNG, or WebP files (max 5MB each) or stick with the curated defaults.
-            </p>
-          </div>
-          <button type="button" class="btn secondary" id="reset-images">
-            Reset to defaults
-          </button>
-        </header>
-        <div class="image-panel__summary" id="image-summary" aria-live="polite">
-          All 12 months are currently using the default artwork set.
-        </div>
-        <div class="image-grid" id="image-grid" aria-live="polite"></div>
-      </section>
     </section>
 
-    <section class="preview">
-      <header class="preview__header">
-        <div>
-          <p class="eyebrow">Live preview</p>
-          <h2>See your calendar evolve</h2>
-          <p class="muted">Calendar previews will populate here as features unlock.</p>
+    <!-- Step Navigation System -->
+    <section class="step-container" aria-label="Calendar generation steps">
+      <div class="stepper" aria-label="Setup steps">
+        <div class="step active" data-step="1" aria-current="step">
+          <div class="step__index" aria-hidden="true">1</div>
+          <p class="step__label">Images</p>
         </div>
-        <button class="btn secondary" id="download-btn" disabled>Download PDF</button>
-      </header>
-      <div class="preview__grid" aria-live="polite">
-        <article class="preview-card skeleton">
-          <div class="preview-card__image shimmer"></div>
-          <div class="preview-card__body">
-            <p class="month-label">January</p>
-            <p class="placeholder">Calendar preview coming soon.</p>
+        <div class="step" data-step="2">
+          <div class="step__index" aria-hidden="true">2</div>
+          <p class="step__label">Preview</p>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step__index" aria-hidden="true">3</div>
+          <p class="step__label">Download</p>
+        </div>
+      </div>
+
+      <!-- Step 1: Image Upload -->
+      <div class="step-content" data-step-content="1" aria-hidden="false">
+        <div class="step-content__top-nav">
+          <button type="button" class="btn ghost step-nav-prev" disabled>Previous</button>
+          <button type="button" class="btn primary step-nav-next">Next</button>
+        </div>
+        <section class="image-panel" aria-label="Monthly image uploads">
+          <header class="image-panel__header">
+            <div>
+              <p class="eyebrow">Step 1 · Images</p>
+              <h2>Upload artwork for every month</h2>
+              <p class="muted">
+                Drag & drop high-quality JPG, PNG, or WebP files (max 5MB each) or stick with the curated defaults.
+              </p>
+            </div>
+            <button type="button" class="btn secondary" id="reset-images">
+              Reset to defaults
+            </button>
+          </header>
+          <div class="image-panel__summary" id="image-summary" aria-live="polite">
+            All 12 months are currently using the default artwork set.
           </div>
-        </article>
-        <article class="preview-card skeleton">
-          <div class="preview-card__image shimmer"></div>
-          <div class="preview-card__body">
-            <p class="month-label">February</p>
-            <p class="placeholder">Calendar preview coming soon.</p>
+          <div class="image-grid" id="image-grid" aria-live="polite"></div>
+          <div class="step-content__actions">
+            <button type="button" class="btn ghost step-nav-prev" disabled>Previous</button>
+            <button type="button" class="btn primary step-nav-next">Next</button>
           </div>
-        </article>
-        <article class="preview-card skeleton">
-          <div class="preview-card__image shimmer"></div>
-          <div class="preview-card__body">
-            <p class="month-label">March</p>
-            <p class="placeholder">Calendar preview coming soon.</p>
+        </section>
+      </div>
+
+      <!-- Step 2: Preview -->
+      <div class="step-content" data-step-content="2" aria-hidden="true">
+        <div class="step-content__top-nav">
+          <button type="button" class="btn ghost step-nav-prev">Previous</button>
+          <button type="button" class="btn primary step-nav-next">Next</button>
+        </div>
+        <section class="preview">
+          <header class="preview__header">
+            <div>
+              <p class="eyebrow">Step 2 · Preview</p>
+              <h2>See your calendar evolve</h2>
+              <p class="muted">Review your calendar before generating the PDF.</p>
+            </div>
+            <button class="btn secondary" id="download-btn" disabled>Download PDF</button>
+          </header>
+          <div class="preview__grid" aria-live="polite">
+            <article class="preview-card skeleton">
+              <div class="preview-card__image shimmer"></div>
+              <div class="preview-card__body">
+                <p class="month-label">January</p>
+                <p class="placeholder">Calendar preview coming soon.</p>
+              </div>
+            </article>
+            <article class="preview-card skeleton">
+              <div class="preview-card__image shimmer"></div>
+              <div class="preview-card__body">
+                <p class="month-label">February</p>
+                <p class="placeholder">Calendar preview coming soon.</p>
+              </div>
+            </article>
+            <article class="preview-card skeleton">
+              <div class="preview-card__image shimmer"></div>
+              <div class="preview-card__body">
+                <p class="month-label">March</p>
+                <p class="placeholder">Calendar preview coming soon.</p>
+              </div>
+            </article>
           </div>
-        </article>
+          <div class="step-content__actions">
+            <button type="button" class="btn ghost step-nav-prev">Previous</button>
+            <button type="button" class="btn primary step-nav-next">Next</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Step 3: Download -->
+      <div class="step-content" data-step-content="3" aria-hidden="true">
+        <div class="step-content__top-nav">
+          <button type="button" class="btn ghost step-nav-prev">Previous</button>
+          <button type="button" class="btn secondary step-nav-start-over">Start Over</button>
+        </div>
+        <section class="download-panel">
+          <header class="download-panel__header">
+            <p class="eyebrow">Step 3 · Download</p>
+            <h2>Generate your calendar PDF</h2>
+            <p class="muted">Ready to create your personalized calendar? Click the button below to generate and download your PDF.</p>
+          </header>
+          <div class="download-panel__summary" id="config-summary" aria-live="polite"></div>
+          <div class="download-panel__content">
+            <button class="btn primary large" id="generate-pdf-btn">Generate & Download PDF</button>
+            <div class="download-panel__status" id="download-status" aria-live="polite"></div>
+          </div>
+          <div class="step-content__actions">
+            <button type="button" class="btn ghost step-nav-prev">Previous</button>
+            <button type="button" class="btn secondary step-nav-start-over">Start Over</button>
+          </div>
+        </section>
       </div>
     </section>
   </main>

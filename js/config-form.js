@@ -25,9 +25,17 @@
 
   const stateFlags = {
     languageAuto: true,
+    isModified: false,
   };
 
+  const subscribers = new Set();
+  let debounceTimer = null;
+  let configPanelEl;
+  let configIndicatorEl;
+
   function init() {
+    configPanelEl = Utils.qs(".config-panel");
+    configIndicatorEl = Utils.qs("#config-indicator");
     hydrateSelectOptions();
     hydrateForm();
     bindEvents();
@@ -95,7 +103,52 @@
     } else {
       appState[name] = value;
     }
+
+    markAsModified();
+    notifySubscribersDebounced();
     console.debug("[ConfigForm][AppState]", { ...appState });
+  }
+
+  function markAsModified() {
+    if (!stateFlags.isModified) {
+      stateFlags.isModified = true;
+      updateConfigIndicator();
+    }
+  }
+
+  function updateConfigIndicator() {
+    if (configPanelEl) {
+      configPanelEl.classList.toggle("config-panel--modified", stateFlags.isModified);
+    }
+
+    if (configIndicatorEl) {
+      if (stateFlags.isModified) {
+        configIndicatorEl.textContent = "Settings updated. Changes will apply to preview and PDF.";
+      } else {
+        configIndicatorEl.textContent = "";
+      }
+    }
+  }
+
+  function notifySubscribersDebounced() {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    debounceTimer = setTimeout(() => {
+      notifySubscribers();
+    }, 300); // 300ms debounce
+  }
+
+  function notifySubscribers() {
+    const state = { ...appState };
+    subscribers.forEach((callback) => {
+      try {
+        callback(state);
+      } catch (error) {
+        console.error("[ConfigForm] Subscriber error:", error);
+      }
+    });
   }
 
   function normalizeYear(inputValue) {
@@ -201,11 +254,19 @@
     }
   }
 
+  function subscribe(callback) {
+    if (typeof callback === "function") {
+      subscribers.add(callback);
+      return () => subscribers.delete(callback);
+    }
+  }
+
   window.ConfigForm = {
     init,
     getState() {
       return { ...appState };
     },
+    subscribe,
   };
 })();
 

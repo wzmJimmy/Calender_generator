@@ -40,6 +40,39 @@ img {
   max-width: 720px;
 }
 
+.hero__status {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(21, 94, 239, 0.2);
+  color: var(--primary-dark);
+}
+
+.hero__status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  display: inline-block;
+}
+
+.hero__status.hero__status--error {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(217, 45, 32, 0.35);
+  color: #7a0f07;
+}
+
+.hero__status.hero__status--error::before {
+  background: #d92d20;
+}
+
 .hero h1 {
   margin: 0.4rem 0 0.6rem;
   font-size: clamp(2rem, 5vw, 3.25rem);
@@ -54,18 +87,93 @@ img {
 }
 
 .app-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: clamp(1.5rem, 4vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.configuration,
-.preview {
+.config-panel {
   background: var(--card);
   border-radius: 24px;
   padding: 2rem;
   box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.config-panel.config-panel--modified {
+  border-color: var(--primary);
+  box-shadow: var(--shadow), 0 0 0 3px rgba(21, 94, 239, 0.1);
+}
+
+.config-panel__indicator {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(21, 94, 239, 0.08);
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-height: 1em;
+  display: none;
+}
+
+.config-panel__indicator:not(:empty) {
+  display: block;
+}
+
+.step-container {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.step-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.step-content[aria-hidden="false"] {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-content__top-nav {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.step-content__actions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.preview {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
 }
 
 .stepper {
@@ -195,9 +303,9 @@ img {
 }
 
 .image-panel {
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--border);
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .image-panel__header {
@@ -383,6 +491,83 @@ img {
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn.large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.download-panel {
+  padding: 0;
+}
+
+.download-panel__header {
+  margin-bottom: 1.5rem;
+}
+
+.download-panel__summary {
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.download-panel__summary h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.download-panel__summary dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+}
+
+.download-panel__summary dt {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.download-panel__summary dd {
+  margin: 0;
+  color: var(--text);
+}
+
+.download-panel__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  background: rgba(21, 94, 239, 0.04);
+  border-radius: 20px;
+  border: 2px dashed var(--border);
+}
+
+.download-panel__status {
+  min-height: 1.5em;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+
+.download-panel__status[data-status="loading"] {
+  color: var(--primary-dark);
+}
+
+.download-panel__status[data-status="success"] {
+  color: #107569;
+}
+
+.download-panel__status[data-status="error"] {
+  color: #b42318;
 }
 
 .preview__header {
