@@ -34,6 +34,19 @@
   gap: 1rem;
 }
 
+/* Cellular layout style (rounded) */
+.calendar-layout--cellular {
+  border-radius: 24px;
+}
+
+/* Apple layout style (straight lines) */
+.calendar-layout--apple {
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  padding: 1.25rem;
+}
+
 .calendar-month__header {
   display: flex;
   align-items: baseline;
@@ -54,11 +67,22 @@
   gap: 0.75rem;
 }
 
+.calendar-layout--apple .calendar-grid {
+  gap: 0;
+}
+
 .calendar-grid--labels {
   gap: 0.5rem;
   border-bottom: 1px solid #f2f4f7;
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.calendar-layout--apple .calendar-grid--labels {
+  gap: 0;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0;
 }
 
 .calendar-grid__label {
@@ -80,6 +104,26 @@
   gap: 0.4rem;
   background: #fff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Apple layout: straight borders, no radius, increased padding */
+.calendar-layout--apple .calendar-cell {
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.85rem 0.75rem;
+  min-height: 100px;
+  background: #fff;
+  transition: background-color 0.15s ease;
+}
+
+.calendar-layout--apple .calendar-grid > .calendar-cell:nth-child(7n) {
+  border-right: none;
+}
+
+.calendar-layout--apple .calendar-grid > .calendar-cell:nth-last-child(-n + 7) {
+  border-bottom: none;
 }
 
 .calendar-cell__date {
@@ -111,9 +155,28 @@
   color: #98a2b3;
 }
 
+/* Apple style: muted cells should also have grey background */
+.calendar-layout--apple .calendar-cell--muted {
+  background: #f9fafb;
+  color: #98a2b3;
+}
+
 .calendar-cell--today {
   border-color: #7f56d9;
   box-shadow: 0 0 0 1px rgba(127, 86, 217, 0.1);
+}
+
+.calendar-layout--apple .calendar-cell--today {
+  border-color: transparent;
+  box-shadow: none;
+  background: #f0f9ff;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-layout--apple .calendar-cell--today .calendar-cell__date {
+  color: #0284c7;
+  font-weight: 700;
 }
 
 .calendar-cell--holiday {
@@ -130,17 +193,47 @@
   color: #026aa2;
 }
 
+.calendar-layout--apple .calendar-cell--holiday {
+  border-color: transparent;
+  background: #f8fdff;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-layout--apple .calendar-cell--holiday .calendar-cell__date {
+  color: #0284c7;
+}
+
+.calendar-layout--apple .calendar-cell--holiday .calendar-cell__holiday-tag {
+  background: #bae6fd;
+  color: #0284c7;
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
   .calendar-month {
     padding: 1rem;
+  }
+
+  .calendar-layout--apple.calendar-month {
+    padding: 0.75rem;
   }
 
   .calendar-grid {
     gap: 0.5rem;
   }
 
+  .calendar-layout--apple .calendar-grid {
+    gap: 0;
+  }
+
   .calendar-cell {
     min-height: 70px;
     padding: 0.5rem;
+  }
+
+  .calendar-layout--apple .calendar-cell {
+    min-height: 75px;
+    padding: 0.65rem 0.5rem;
   }
 }

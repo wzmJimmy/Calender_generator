@@ -25,6 +25,39 @@
         margin-top: 2rem;
       }
 
+      .style-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .style-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .style-section h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #475467;
+        margin: 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e4e7ec;
+      }
+
+      .style-section h2.active {
+        color: #7f56d9;
+        border-bottom-color: #7f56d9;
+      }
+
+      @media (max-width: 768px) {
+        .style-comparison {
+          grid-template-columns: 1fr;
+        }
+      }
+
       .controls {
         display: flex;
         flex-wrap: wrap;
@@ -52,6 +85,7 @@
     <script src="js/utils.js" defer></script>
     <script src="js/localization-data.js" defer></script>
     <script src="js/holiday-data.js" defer></script>
+    <script src="js/calendar-data.js" defer></script>
     <script src="js/calendar.js" defer></script>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
@@ -59,7 +93,9 @@
         const langSelect = document.querySelector("#demo-language");
         const startDaySelect = document.querySelector("#demo-start-day");
         const countrySelect = document.querySelector("#demo-country");
+        const layoutStyleSelect = document.querySelector("#demo-layout-style");
         const container = document.querySelector("#calendar-demo-grid");
+        const comparisonContainer = document.querySelector("#calendar-comparison");
 
         function populateLanguages() {
           const options = (window.LocalizationData?.languages || []).map(
@@ -84,6 +120,7 @@
           const language = langSelect.value;
           const startDay = startDaySelect.value;
           const country = countrySelect.value;
+          const layoutStyle = layoutStyleSelect?.value || window.CalendarEngine?.DEFAULT_LAYOUT_STYLE || "cellular";
 
           container.innerHTML = "";
 
@@ -94,11 +131,62 @@
               language,
               startDay,
               country,
+              layoutStyle,
             });
 
             element.style.height = "100%";
             container.appendChild(element);
           });
+        }
+
+        function renderComparison() {
+          if (!window.CalendarEngine || !comparisonContainer) return;
+
+          const year = Number(yearInput.value) || new Date().getFullYear();
+          const language = langSelect.value;
+          const startDay = startDaySelect.value;
+          const country = countrySelect.value;
+
+          comparisonContainer.innerHTML = "";
+
+          const cellularSection = document.createElement("div");
+          cellularSection.className = "style-section";
+          const cellularTitle = document.createElement("h2");
+          cellularTitle.textContent = "Cellular Style (Rounded)";
+          cellularTitle.classList.add("active");
+          cellularSection.appendChild(cellularTitle);
+
+          const appleSection = document.createElement("div");
+          appleSection.className = "style-section";
+          const appleTitle = document.createElement("h2");
+          appleTitle.textContent = "Apple Style (Straight Lines)";
+          appleSection.appendChild(appleTitle);
+
+          // Render same month (January) in both styles
+          [0].forEach((monthIndex) => {
+            const cellularResult = window.CalendarEngine.renderMonth({
+              year,
+              monthIndex,
+              language,
+              startDay,
+              country,
+              layoutStyle: "cellular",
+            });
+            cellularSection.appendChild(cellularResult.element);
+
+            const appleResult = window.CalendarEngine.renderMonth({
+              year,
+              monthIndex,
+              language,
+              startDay,
+              country,
+              layoutStyle: "apple",
+            });
+            appleSection.appendChild(appleResult.element);
+          });
+
+          comparisonContainer.appendChild(cellularSection);
+          comparisonContainer.appendChild(appleSection);
         }
 
         populateLanguages();
@@ -108,9 +196,19 @@
 
         yearInput.value = new Date().getFullYear();
         renderCalendars();
+        renderComparison();
 
-        [yearInput, langSelect, startDaySelect, countrySelect].forEach((input) => {
-          input.addEventListener("change", renderCalendars);
+        const allInputs = [yearInput, langSelect, startDaySelect, countrySelect];
+        if (layoutStyleSelect) {
+          allInputs.push(layoutStyleSelect);
+        }
+        allInputs.forEach((input) => {
+          if (input) {
+            input.addEventListener("change", () => {
+              renderCalendars();
+              renderComparison();
+            });
+          }
         });
       });
     </script>
@@ -146,9 +244,22 @@
           <option value="saturday">Saturday</option>
         </select>
       </label>
+      <label>
+        Layout Style
+        <select id="demo-layout-style">
+          <option value="cellular">Cellular (Rounded)</option>
+          <option value="apple">Apple (Straight Lines)</option>
+        </select>
+      </label>
     </div>
 
     <section id="calendar-demo-grid" class="demo-grid" aria-live="polite"></section>
+
+    <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Style Comparison</h2>
+    <p style="margin-bottom: 1rem; color: #475467;">
+      Compare the same month rendered in both layout styles side by side:
+    </p>
+    <section id="calendar-comparison" class="style-comparison" aria-live="polite"></section>
   </body>
 </html>
 

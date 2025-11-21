@@ -184,13 +184,14 @@
     body.className = "preview-card__body";
 
     try {
-      // Render calendar using CalendarEngine
+      // Render calendar using CalendarEngine with Apple style layout
       const calendarResult = CalendarEngine.renderMonth({
         year: currentConfig.year,
         monthIndex: monthIndex,
         startDay: currentConfig.startDay,
         language: currentConfig.language,
         country: currentConfig.country,
+        layoutStyle: "apple",
       });
 
       if (calendarResult && calendarResult.element) {

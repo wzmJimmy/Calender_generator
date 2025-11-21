@@ -70,6 +70,7 @@ sandboxWindow.Holidays = HolidaysStub;
 loadScript("js/utils.js", sandbox);
 loadScript("js/localization-data.js", sandbox);
 loadScript("js/holiday-data.js", sandbox);
+loadScript("js/calendar-data.js", sandbox);
 loadScript("js/calendar.js", sandbox);
 
 const { CalendarEngine, HolidayService } = sandboxWindow;

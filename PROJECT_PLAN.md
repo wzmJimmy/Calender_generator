@@ -23,6 +23,7 @@ A web-based application that allows users to generate personalized calendar PDFs
 ```
 calendar_generator/
 ├── index.html                 # Main HTML file
+├── calendar-demo.html         # Calendar demo/example page
 ├── css/
 │   ├── styles.css            # Main stylesheet
 │   └── calendar.css          # Calendar-specific styles
@@ -32,6 +33,10 @@ calendar_generator/
 │   ├── pdf-generator.js      # PDF generation functionality
 │   ├── image-handler.js      # Image upload and management
 │   ├── holiday-data.js       # Holiday integration
+│   ├── config-form.js        # Configuration form handling
+│   ├── localization-data.js  # Localization metadata (countries, languages)
+│   ├── preview.js            # Preview functionality
+│   ├── step-navigation.js    # Step-by-step navigation system
 │   └── utils.js              # Utility functions
 ├── assets/
 │   ├── default-images/       # Default images for months
@@ -40,7 +45,12 @@ calendar_generator/
 │   │   └── ... (12 images)
 │   └── fonts/                # Custom fonts if needed
 ├── lib/                      # Third-party libraries (if not using CDN)
-└── README.md                 # Project documentation
+├── tests/                    # Test files
+│   ├── calendar-engine.test.js
+│   ├── config-form.test.js
+│   ├── image-handler.test.js
+│   └── preview.test.js
+└── PROJECT_PLAN.md           # Project documentation and plan
 ```
 
 ## Detailed Implementation Steps
@@ -255,37 +265,43 @@ calendar_generator/
 ### Phase 4c: Calendar Engine Refactoring & Layout System
 
 #### Step 4c.1: Split Calendar Logic into Data and Rendering
-- [ ] Create `js/calendar-data.js` for pure data generation:
+- [x] Create `js/calendar-data.js` for pure data generation:
   - Move data functions: `getMonthGrid()`, `buildCells()`, `getDaysInMonth()`, `getLeadingDayCount()`, `normalizeInputs()`, `chunkIntoWeeks()`, localization helpers
   - Expose API: `CalendarData.getMonthGrid(year, monthIndex, options)` returning pure data (no DOM)
-- [ ] Refactor `js/calendar.js` to focus on rendering:
+- [x] Refactor `js/calendar.js` to focus on rendering:
   - Create `CalendarRenderer.render(grid, layoutStyle)` abstraction
   - Move `renderMonth()`, `createDayCell()` to renderer
   - Support multiple layout styles via strategy/factory pattern
-- [ ] Update references (`preview.js`, `pdf-generator.js`, tests)
-- [ ] Maintain backward compatibility: Keep `CalendarEngine` as facade using both modules
+- [x] Update references (`preview.js`, `pdf-generator.js`, tests)
+- [x] Maintain backward compatibility: Keep `CalendarEngine` as facade using both modules
 
 #### Step 4c.2: Layout Style System
-- [ ] Create layout style registry: `"default"` (rounded), `"apple"` (straight lines), future styles
-- [ ] Implement style factory/strategy pattern
-- [ ] Add CSS classes: `.calendar-layout--default`, `.calendar-layout--apple`
-- [ ] Update renderer to accept `layoutStyle` parameter
+- [x] Create layout style registry: `"cellular"` (rounded), `"apple"` (straight lines), future styles
+- [x] Implement style factory/strategy pattern
+- [x] Add CSS classes: `.calendar-layout--cellular`, `.calendar-layout--apple`
+- [x] Update renderer to accept `layoutStyle` parameter
+- [x] Add `DEFAULT_LAYOUT_STYLE` configuration constant for easy default style switching
+- [x] Expose `CalendarEngine.DEFAULT_LAYOUT_STYLE` for external access
 
 #### Step 4c.3: Apple Calendar Style
-- [ ] Design: Remove all rounded borders, use straight 1px dividers, increase padding, simplify hierarchy
-- [ ] CSS: Straight borders, no radius, optimized spacing, maintain holiday/today highlighting
-- [ ] Test with various start days, month lengths, responsive behavior
+- [x] Design: Remove all rounded borders, use straight 1px dividers, increase padding, simplify hierarchy
+- [x] CSS: Straight borders, no radius, optimized spacing, maintain holiday/today highlighting
+- [x] Add grey background (`#f9fafb`) for muted cells (days not in current month) to match cellular style
+- [x] Test with various start days, month lengths, responsive behavior
+- [x] Update `calendar-demo.html` to show both styles with option to switch and side-by-side comparison
 
-#### Step 4c.4: Testing
-- [ ] Test data generation (independent of rendering)
-- [ ] Test layout style switching
-- [ ] Test with various configurations (years, start days, languages, holidays)
+#### Step 4c.4: Testing & Integration
+- [x] Test data generation (independent of rendering)
+- [x] Test layout style switching
+- [x] Test with various configurations (years, start days, languages, holidays)
+- [x] Update preview to use Apple style layout by default
+- [x] Verify calendar engine tests pass with new structure
 
 ### Phase 4d: Preview Customization & Enhanced Visualization
 
 #### Step 4d.1: Preview State Management
 - [ ] Create `PreviewConfig` module:
-  - Split ratio (30-60%, default 40%), paper type (A4/Letter/Legal), orientation (Portrait/Landscape), image fit mode (cover/fill/contain/none), layout style (default/apple)
+  - Split ratio (30-60%, default 40%), paper type (A4/Letter/Legal), orientation (Portrait/Landscape), image fit mode (cover/fill/contain/none), layout style (cellular/apple)
   - Expose `getState()`, `setState()`, `subscribe()` API
   - Validate all config values, provide defaults
   - Optional: localStorage persistence
@@ -296,7 +312,7 @@ calendar_generator/
   - Paper type selector (A4/Letter/Legal)
   - Orientation toggle (Portrait/Landscape)
   - Image fit mode dropdown (Cover/Fill/Contain/None with descriptions)
-  - Layout style selector (Default/Apple)
+  - Layout style selector (Cellular/Apple)
 - [ ] Wire controls to `PreviewConfig`, update preview in real-time (debounced)
 
 #### Step 4d.3: Preview Aspect Ratio & Split Ratio
