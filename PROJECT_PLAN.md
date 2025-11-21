@@ -235,22 +235,101 @@ calendar_generator/
 ### Phase 4b: Preview Calendar Experience
 
 #### Step 4b.1: Calendar Preview Rendering
-- [ ] Replace preview placeholders with actual calendar output from `CalendarEngine.renderMonth`
-- [ ] Mirror PDF layout structure to guarantee parity between preview and generated pages
+- [x] Replace preview placeholders with actual calendar output from `CalendarEngine.renderMonth`
+- [x] Mirror PDF layout structure to guarantee parity between preview and generated pages
 
 #### Step 4b.2: Preview Pagination & Controls
-- [ ] Add prev/next controls with disabled states at bounds
-- [ ] Provide quick jump (dropdown or selector) to any month
-- [ ] Persist pagination state when navigating between steps
+- [x] Add prev/next controls with disabled states at bounds
+- [x] Provide quick jump (dropdown or selector) to any month
+- [x] Persist pagination state when navigating between steps
 
 #### Step 4b.3: Preview Data Wiring
-- [ ] Sync preview with config changes (year, locale, holidays) without page reload
-- [ ] Inject month-specific images above each calendar using shared rendering helpers
-- [ ] Debounce re-rendering to keep interactions smooth
+- [x] Sync preview with config changes (year, locale, holidays) without page reload
+- [x] Inject month-specific images above each calendar using shared rendering helpers
+- [x] Debounce re-rendering to keep interactions smooth
 
 #### Step 4b.4: Preview Testing
-- [ ] Add lightweight DOM tests to verify pagination updates current month
-- [ ] Validate that preview reuses CalendarEngine markup for fidelity
+- [x] Add lightweight DOM tests to verify pagination updates current month
+- [x] Validate that preview reuses CalendarEngine markup for fidelity
+
+### Phase 4c: Calendar Engine Refactoring & Layout System
+
+#### Step 4c.1: Split Calendar Logic into Data and Rendering
+- [ ] Create `js/calendar-data.js` for pure data generation:
+  - Move data functions: `getMonthGrid()`, `buildCells()`, `getDaysInMonth()`, `getLeadingDayCount()`, `normalizeInputs()`, `chunkIntoWeeks()`, localization helpers
+  - Expose API: `CalendarData.getMonthGrid(year, monthIndex, options)` returning pure data (no DOM)
+- [ ] Refactor `js/calendar.js` to focus on rendering:
+  - Create `CalendarRenderer.render(grid, layoutStyle)` abstraction
+  - Move `renderMonth()`, `createDayCell()` to renderer
+  - Support multiple layout styles via strategy/factory pattern
+- [ ] Update references (`preview.js`, `pdf-generator.js`, tests)
+- [ ] Maintain backward compatibility: Keep `CalendarEngine` as facade using both modules
+
+#### Step 4c.2: Layout Style System
+- [ ] Create layout style registry: `"default"` (rounded), `"apple"` (straight lines), future styles
+- [ ] Implement style factory/strategy pattern
+- [ ] Add CSS classes: `.calendar-layout--default`, `.calendar-layout--apple`
+- [ ] Update renderer to accept `layoutStyle` parameter
+
+#### Step 4c.3: Apple Calendar Style
+- [ ] Design: Remove all rounded borders, use straight 1px dividers, increase padding, simplify hierarchy
+- [ ] CSS: Straight borders, no radius, optimized spacing, maintain holiday/today highlighting
+- [ ] Test with various start days, month lengths, responsive behavior
+
+#### Step 4c.4: Testing
+- [ ] Test data generation (independent of rendering)
+- [ ] Test layout style switching
+- [ ] Test with various configurations (years, start days, languages, holidays)
+
+### Phase 4d: Preview Customization & Enhanced Visualization
+
+#### Step 4d.1: Preview State Management
+- [ ] Create `PreviewConfig` module:
+  - Split ratio (30-60%, default 40%), paper type (A4/Letter/Legal), orientation (Portrait/Landscape), image fit mode (cover/fill/contain/none), layout style (default/apple)
+  - Expose `getState()`, `setState()`, `subscribe()` API
+  - Validate all config values, provide defaults
+  - Optional: localStorage persistence
+
+#### Step 4d.2: Preview Configuration Panel
+- [ ] Create config panel in Step 2 (Preview):
+  - Split-ratio slider (30-60%, default 40%, step 5%)
+  - Paper type selector (A4/Letter/Legal)
+  - Orientation toggle (Portrait/Landscape)
+  - Image fit mode dropdown (Cover/Fill/Contain/None with descriptions)
+  - Layout style selector (Default/Apple)
+- [ ] Wire controls to `PreviewConfig`, update preview in real-time (debounced)
+
+#### Step 4d.3: Preview Aspect Ratio & Split Ratio
+- [ ] Calculate paper aspect ratios: A4 (0.707/1.414), Letter (0.773/1.294), Legal (0.607/1.647)
+- [ ] Apply aspect ratio to preview container using CSS `aspect-ratio` property
+- [ ] Apply split ratio: Image `height: ${splitRatio}%`, Calendar `height: ${100 - splitRatio}%`
+- [ ] Add paper type/orientation indicator (e.g., "A4 Portrait - 210×297mm")
+- [ ] Smooth transitions, validate bounds (30-60%)
+
+#### Step 4d.4: Calendar Table as Image Rendering
+- [ ] Create `generateCalendarImage(calendarElement, options)` using html2canvas:
+  - Render to hidden container, capture as data URL, handle async/errors
+- [ ] Update preview to use calendar image:
+  - Display as `<img>` with `object-fit: fill`, control size via container (split ratio)
+- [ ] Implement caching: Cache by config hash (year, month, layout, dimensions), invalidate on changes
+- [ ] Handle loading states, errors (fallback to HTML), retry logic
+
+#### Step 4d.5: Preview UI Enhancements
+- [ ] Enhance config panel: Collapsible section, grouped controls, loading indicators
+- [ ] Add paper size indicator with dimensions
+- [ ] Optional: Preview scale indicator
+- [ ] Ensure responsive design
+
+#### Step 4d.6: Expose Preview Config in PDF Summary
+- [ ] Update `updateConfigSummary()` in `main.js`:
+  - Include split ratio, paper type/orientation, image fit mode, layout style
+  - Group preview settings in separate section with readable labels
+- [ ] Subscribe to preview config changes, auto-refresh summary
+- [ ] Test all config combinations
+
+#### Step 4d.7: Testing
+- [ ] Test split ratio, paper type/orientation, image fit modes, calendar image rendering/caching
+- [ ] Test preview config persistence, layout switching, summary updates
 
 ### Phase 5: PDF Generation
 
@@ -452,13 +531,27 @@ calendar_generator/
 - **Phase 3**: 2-3 hours (Image Upload)
 - **Phase 3b**: 2-3 hours (Step-by-Step Navigation & Real-Time Config)
 - **Phase 4**: 3-4 hours (Calendar Logic)
+- **Phase 4b**: 2-3 hours (Preview Calendar Experience) ✅
+- **Phase 4c**: 4-6 hours (Calendar Engine Refactoring & Layout System)
+  - Step 4c.1: 1.5-2 hours (Split data/rendering)
+  - Step 4c.2: 1-1.5 hours (Layout system)
+  - Step 4c.3: 1-1.5 hours (Apple style)
+  - Step 4c.4: 0.5-1 hour (Testing)
+- **Phase 4d**: 6-8 hours (Preview Customization & Enhanced Visualization)
+  - Step 4d.1: 0.5-1 hour (State management)
+  - Step 4d.2: 1-1.5 hours (Config panel)
+  - Step 4d.3: 1-1.5 hours (Aspect ratio & split ratio)
+  - Step 4d.4: 2-2.5 hours (Calendar as image)
+  - Step 4d.5: 0.5-1 hour (UI enhancements)
+  - Step 4d.6: 0.5 hour (PDF summary)
+  - Step 4d.7: 0.5-1 hour (Testing)
 - **Phase 5**: 3-4 hours (PDF Generation)
-- **Phase 6**: 2-3 hours (Preview)
+- **Phase 6**: 2-3 hours (Preview) - *Note: Mostly covered by Phase 4b/4d*
 - **Phase 7**: 1-2 hours (Image Replacement)
 - **Phase 8**: 1 hour (Download)
 - **Phase 9**: 2-3 hours (Polish)
 
-**Total Estimated Time**: 18-26 hours for MVP
+**Total Estimated Time**: 28-38 hours for MVP with enhancements
 
 ## Success Criteria
 

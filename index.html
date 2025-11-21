@@ -22,6 +22,7 @@
   <script src="js/holiday-data.js" defer></script>
   <script src="js/config-form.js" defer></script>
   <script src="js/step-navigation.js" defer></script>
+  <script src="js/preview.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -143,29 +144,28 @@
             </div>
             <button class="btn secondary" id="download-btn" disabled>Download PDF</button>
           </header>
-          <div class="preview__grid" aria-live="polite">
-            <article class="preview-card skeleton">
-              <div class="preview-card__image shimmer"></div>
-              <div class="preview-card__body">
-                <p class="month-label">January</p>
-                <p class="placeholder">Calendar preview coming soon.</p>
-              </div>
-            </article>
-            <article class="preview-card skeleton">
-              <div class="preview-card__image shimmer"></div>
-              <div class="preview-card__body">
-                <p class="month-label">February</p>
-                <p class="placeholder">Calendar preview coming soon.</p>
-              </div>
-            </article>
-            <article class="preview-card skeleton">
-              <div class="preview-card__image shimmer"></div>
-              <div class="preview-card__body">
-                <p class="month-label">March</p>
-                <p class="placeholder">Calendar preview coming soon.</p>
-              </div>
-            </article>
+          <div class="preview__controls" aria-label="Month navigation">
+            <button type="button" class="btn ghost" id="preview-prev" aria-label="Previous month">Previous</button>
+            <label class="preview__month-selector">
+              <span class="sr-only">Select month</span>
+              <select id="preview-month-selector" aria-label="Select month to preview">
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+              </select>
+            </label>
+            <button type="button" class="btn ghost" id="preview-next" aria-label="Next month">Next</button>
           </div>
+          <div class="preview__grid" aria-live="polite"></div>
           <div class="step-content__actions">
             <button type="button" class="btn ghost step-nav-prev">Previous</button>
             <button type="button" class="btn primary step-nav-next">Next</button>

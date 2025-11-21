@@ -11,6 +11,7 @@
     PdfGenerator.init();
     ConfigForm?.init?.();
     StepNavigation?.init?.();
+    Preview?.init?.();
     bindNavigation();
     setupConfigChangeListener();
     setupStepNavigationListener();

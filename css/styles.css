@@ -578,6 +578,41 @@ img {
   flex-wrap: wrap;
 }
 
+.preview__controls {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.preview__month-selector {
+  display: flex;
+  align-items: center;
+}
+
+.preview__month-selector select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-size: 0.95rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.preview__month-selector select:hover {
+  border-color: var(--primary);
+}
+
+.preview__month-selector select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(127, 86, 217, 0.1);
+}
+
 .preview__grid {
   margin-top: 2rem;
   display: grid;
@@ -619,6 +654,18 @@ img {
 
 .muted {
   color: var(--muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .skeleton {
