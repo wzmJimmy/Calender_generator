@@ -6,18 +6,18 @@
   const DEFAULT_IMAGE_BASE_PATH = "assets/default-images/";
 
   const MONTH_MANIFEST = [
-    { key: "january", label: "January", file: "january.svg", description: "Fresh Beginnings" },
-    { key: "february", label: "February", file: "february.svg", description: "Cozy Moments" },
-    { key: "march", label: "March", file: "march.svg", description: "Spring Greens" },
-    { key: "april", label: "April", file: "april.svg", description: "Gentle Showers" },
-    { key: "may", label: "May", file: "may.svg", description: "Bloom & Shine" },
-    { key: "june", label: "June", file: "june.svg", description: "Ocean Breezes" },
-    { key: "july", label: "July", file: "july.svg", description: "Summer Bursts" },
-    { key: "august", label: "August", file: "august.svg", description: "Sunset Trails" },
-    { key: "september", label: "September", file: "september.svg", description: "Crisp Transitions" },
-    { key: "october", label: "October", file: "october.svg", description: "Harvest Glow" },
-    { key: "november", label: "November", file: "november.svg", description: "Cozy Twilight" },
-    { key: "december", label: "December", file: "december.svg", description: "Festive Lights" },
+    { key: "january", label: "January", file: "january.jpg", description: "Fresh Beginnings" },
+    { key: "february", label: "February", file: "february.jpg", description: "Cozy Moments" },
+    { key: "march", label: "March", file: "march.jpg", description: "Spring Greens" },
+    { key: "april", label: "April", file: "april.jpg", description: "Gentle Showers" },
+    { key: "may", label: "May", file: "may.jpg", description: "Bloom & Shine" },
+    { key: "june", label: "June", file: "june.jpg", description: "Ocean Breezes" },
+    { key: "july", label: "July", file: "july.jpg", description: "Summer Bursts" },
+    { key: "august", label: "August", file: "august.jpg", description: "Sunset Trails" },
+    { key: "september", label: "September", file: "september.jpg", description: "Crisp Transitions" },
+    { key: "october", label: "October", file: "october.jpg", description: "Harvest Glow" },
+    { key: "november", label: "November", file: "november.jpg", description: "Cozy Twilight" },
+    { key: "december", label: "December", file: "december.jpg", description: "Festive Lights" },
   ];
 
   const state = {
@@ -65,7 +65,7 @@
           type: "default",
           url: defaultPath,
           dataUrl: defaultPath,
-          mimeType: "image/svg+xml",
+          mimeType: "image/jpeg",
           size: null,
           width: null,
           height: null,
@@ -389,7 +389,7 @@
       type: "default",
       url: `${DEFAULT_IMAGE_BASE_PATH}${MONTH_MANIFEST[slot.monthIndex].file}`,
       dataUrl: `${DEFAULT_IMAGE_BASE_PATH}${MONTH_MANIFEST[slot.monthIndex].file}`,
-      mimeType: "image/svg+xml",
+      mimeType: "image/jepg",
       size: null,
       width: null,
       height: null,
