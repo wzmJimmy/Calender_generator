@@ -383,80 +383,132 @@ calendar_generator/
 
 ### Phase 5: PDF Generation
 
-#### Step 5.1: Page Layout Design
-- [ ] Design base layout: Image at top, calendar at bottom
-- [ ] Set page dimensions (A4: 210mm x 297mm or Letter: 8.5" x 11")
-- [ ] Calculate image dimensions (maintain aspect ratio)
-- [ ] Calculate calendar dimensions
-- [ ] Add margins and spacing
+> **Note:** This phase reuses extensive functionality from Phase 4d (Preview Customization), including calendar image generation, preview config (paper types, orientations, split ratios), and layout styles.
 
-#### Step 5.2: PDF Generation Function
-- [ ] Use jsPDF to create PDF document
-- [ ] For each month (1-12):
-  - Add image to top of page
-  - Add calendar grid below image
-  - Add month name and year
-  - Handle page breaks
-- [ ] Set PDF metadata (title, author, etc.)
+#### Step 5.1: Reuse Preview Infrastructure
+- [ ] Extract `generateCalendarImage()` from `preview.js` to a shared utility or keep in preview and call from PDF generator
+- [ ] Reuse `PreviewConfig` for paper type, orientation, split ratio, image fit mode, and layout style
+- [ ] Reuse `CalendarEngine.renderMonth()` for calendar rendering
+- [ ] Reuse `ImageHandler.getImages()` for month images
+- [ ] Reuse `ConfigForm.getState()` for calendar configuration (year, language, country, startDay)
 
-#### Step 5.3: Image Processing for PDF
-- [ ] Convert images to appropriate format for PDF
-- [ ] Resize images to fit page dimensions
-- [ ] Maintain aspect ratio
-- [ ] Handle different image orientations
+#### Step 5.2: PDF Page Layout & Dimensions
+- [ ] Get paper dimensions from `PreviewConfig.getPaperDimensionsString()` and `PreviewConfig.PAPER_DIMENSIONS`
+- [ ] Calculate page dimensions in mm (convert to points for jsPDF: 1mm = 2.83465 points)
+- [ ] Apply split ratio from preview config to determine image vs calendar height
+- [ ] Add margins (e.g., 10mm on all sides)
+- [ ] Calculate image container dimensions (maintain aspect ratio, respect image fit mode)
+- [ ] Calculate calendar container dimensions (remaining height after image)
 
-#### Step 5.4: Calendar Styling in PDF
-- [ ] Apply consistent styling to calendar in PDF
-- [ ] Ensure text is readable
-- [ ] Style holidays appropriately
-- [ ] Add borders and grid lines
+#### Step 5.3: PDF Generation Function
+- [ ] Use jsPDF to create PDF document with correct page size (A4/Letter/Legal, Portrait/Landscape)
+- [ ] For each month (0-11):
+  - Get month image from `ImageHandler.getImages()[monthIndex]`
+  - Generate calendar image using `generateCalendarImage()` (reuse from preview) or render directly
+  - Add image to top of page (respecting split ratio and image fit mode)
+  - Add calendar image below image (or render calendar directly to PDF)
+  - Handle page breaks (one month per page)
+- [ ] Set PDF metadata:
+  - Title: `Calendar {year}`
+  - Author: User or app name
+  - Subject: Generated calendar
+  - Keywords: calendar, year
+
+#### Step 5.4: Image Processing for PDF
+- [x] Images already processed in `ImageHandler` (compressed, resized to max 1800px edge, JPEG format)
+- [ ] Convert image data URLs to format jsPDF can use (base64 data URLs work directly)
+- [ ] Resize images to fit calculated page dimensions (maintain aspect ratio)
+- [ ] Apply image fit mode (cover/fill/contain/none) from preview config
+- [ ] Handle different image orientations (portrait/landscape images)
+
+#### Step 5.5: Calendar Rendering for PDF
+- [x] Calendar rendering logic already exists in `CalendarEngine.renderMonth()`
+- [x] Calendar image generation already exists in `preview.js` using html2canvas
+- [ ] Option A: Use calendar image from preview (reuse `generateCalendarImage()`)
+  - Generate calendar image for each month
+  - Add image to PDF at correct position
+  - Benefits: Consistent with preview, handles fonts/styles automatically
+- [ ] Option B: Render calendar directly to PDF using jsPDF
+  - Use jsPDF text/drawing APIs to recreate calendar grid
+  - More control but requires reimplementing styling
+  - Recommended: Use Option A (reuse preview image generation)
 
 ### Phase 6: Preview Functionality
 
-#### Step 6.1: Preview Generation
-- [ ] Create preview container in HTML
-- [ ] Generate preview for all 12 months
-- [ ] Display months in scrollable grid or carousel
-- [ ] Show month name, image, and calendar for each
+> **Note:** This phase was completed in Phase 4b (Preview Calendar Experience) and Phase 4d (Preview Customization & Enhanced Visualization). All functionality is implemented and working.
 
-#### Step 6.2: Preview Navigation
-- [ ] Add navigation between months
-- [ ] Show month indicators
-- [ ] Allow quick jump to specific month
-- [ ] Add zoom functionality if needed
+#### Step 6.1: Preview Generation ✅ (Completed in Phase 4b)
+- [x] Create preview container in HTML
+- [x] Generate preview for current month (pagination-based)
+- [x] Display month with image and calendar
+- [x] Show month name, image, and calendar for each
 
-#### Step 6.3: Preview Styling
-- [ ] Match preview styling to PDF output
-- [ ] Ensure accurate representation
-- [ ] Add loading states
-- [ ] Handle errors gracefully
+#### Step 6.2: Preview Navigation ✅ (Completed in Phase 4b)
+- [x] Add navigation between months (prev/next buttons)
+- [x] Show month indicators (month selector dropdown)
+- [x] Allow quick jump to specific month
+- [x] Pagination state persists when navigating between steps
+
+#### Step 6.3: Preview Styling ✅ (Completed in Phase 4d)
+- [x] Match preview styling to PDF output (uses same calendar rendering)
+- [x] Ensure accurate representation (calendar rendered as image using html2canvas)
+- [x] Add loading states (loading indicators during calendar image generation)
+- [x] Handle errors gracefully (fallback to HTML if image generation fails)
+- [x] Preview config panel with paper type, orientation, split ratio, image fit mode, layout style
+- [x] Real-time preview updates when config changes
 
 ### Phase 7: Image Replacement Feature
 
-#### Step 7.1: Replace Image Interface
-- [ ] Add "Change Image" button for each month in preview
-- [ ] Open image upload dialog for specific month
-- [ ] Update preview immediately after replacement
-- [ ] Maintain state consistency
+> **Note:** Basic image replacement is already available in Step 2 (Image Upload). This phase adds quick replacement from the preview step for better UX.
 
-#### Step 7.2: Regenerate Preview
-- [ ] Update preview when image is replaced
-- [ ] Maintain other settings
-- [ ] Show loading indicator during regeneration
+#### Step 7.1: Quick Replace from Preview (Optional Enhancement)
+- [ ] Add "Change Image" button or icon in preview card for current month
+- [ ] Open image upload dialog for specific month (reuse `ImageHandler` upload logic)
+- [ ] Update preview immediately after replacement (preview already subscribes to `ImageHandler` changes)
+- [ ] Maintain state consistency (images stored in `ImageHandler` state)
+- [ ] Alternative: Add link/button to navigate to Step 2 with month pre-selected
+
+#### Step 7.2: Regenerate Preview ✅ (Already Implemented)
+- [x] Preview automatically updates when image is replaced (via `ImageHandler` subscription)
+- [x] Maintains other settings (config, preview config persist)
+- [x] Shows loading indicator during regeneration (calendar image generation shows loading state)
+
+#### Step 7.3: Image Replacement from Step 2 ✅ (Already Implemented)
+- [x] Users can upload/replace images for any month in Step 2
+- [x] Images are validated, compressed, and optimized
+- [x] Preview updates automatically when images change
+- [x] Delete button to revert to default images
 
 ### Phase 8: Download Functionality
 
-#### Step 8.1: Download Button
-- [ ] Add download button in preview section
-- [ ] Generate PDF on click
-- [ ] Show progress indicator
-- [ ] Handle errors
+> **Note:** This phase wires up the PDF generation from Phase 5 to the download button and handles the download flow.
 
-#### Step 8.2: PDF File Generation
-- [ ] Trigger PDF generation with current settings
-- [ ] Generate all 12 pages
-- [ ] Create downloadable blob
-- [ ] Set filename: `calendar-{year}.pdf`
+#### Step 8.1: Download Button Integration
+- [ ] Locate download button in Step 4 (Download step) or preview section
+- [ ] Wire download button to `PdfGenerator.generate()` function
+- [ ] Show progress indicator during PDF generation (all 12 months)
+- [ ] Display progress: "Generating page 1/12...", "Generating page 2/12...", etc.
+- [ ] Handle errors gracefully with user-friendly messages
+- [ ] Disable download button during generation to prevent duplicate requests
+
+#### Step 8.2: PDF File Generation & Download
+- [ ] Call `PdfGenerator.generate()` with current configuration:
+  - Get config from `ConfigForm.getState()`
+  - Get images from `ImageHandler.getImages()`
+  - Get preview config from `PreviewConfig.getState()`
+- [ ] Generate all 12 pages (one month per page)
+- [ ] Create downloadable blob from jsPDF document
+- [ ] Set filename: `calendar-{year}.pdf` (e.g., `calendar-2024.pdf`)
+- [ ] Trigger browser download using `jsPDF.save()` or `URL.createObjectURL()` + `<a>` download
+- [ ] Show success message after download completes
+
+#### Step 8.3: PDF Generation Progress & Feedback
+- [ ] Show progress bar or step indicator (1/12, 2/12, ..., 12/12)
+- [ ] Update progress as each month is processed
+- [ ] Show estimated time remaining (optional)
+- [ ] Allow cancellation (optional, may require web worker)
+- [ ] Show success message with filename
+- [ ] Handle memory issues for large PDFs (consider generating in chunks if needed)
 
 ### Phase 9: Polish & Optimization
 
@@ -595,10 +647,18 @@ calendar_generator/
   - Step 4d.5: 0.5-1 hour (UI enhancements) ✅
   - Step 4d.6: 0.5 hour (PDF summary) ✅
   - Step 4d.7: 0.5-1 hour (Testing) ✅
-- **Phase 5**: 3-4 hours (PDF Generation)
-- **Phase 6**: 2-3 hours (Preview) - *Note: Mostly covered by Phase 4b/4d*
-- **Phase 7**: 1-2 hours (Image Replacement)
-- **Phase 8**: 1 hour (Download)
+- **Phase 5**: 3-4 hours (PDF Generation) - *Reuses Phase 4d infrastructure*
+  - Step 5.1: 0.5 hour (Reuse preview infrastructure)
+  - Step 5.2: 0.5-1 hour (Page layout & dimensions)
+  - Step 5.3: 1-1.5 hours (PDF generation function)
+  - Step 5.4: 0.5 hour (Image processing - mostly done)
+  - Step 5.5: 0.5-1 hour (Calendar rendering - reuse preview images)
+- **Phase 6**: ✅ Completed in Phase 4b/4d (Preview Functionality)
+- **Phase 7**: 0.5-1 hour (Image Replacement) - *Basic replacement already works, optional quick replace from preview*
+- **Phase 8**: 1-1.5 hours (Download Functionality)
+  - Step 8.1: 0.5 hour (Download button integration)
+  - Step 8.2: 0.5 hour (PDF file generation & download)
+  - Step 8.3: 0.5 hour (Progress & feedback)
 - **Phase 9**: 2-3 hours (Polish)
 
 **Total Estimated Time**: 28-38 hours for MVP with enhancements
@@ -610,9 +670,9 @@ calendar_generator/
 - [x] Images are validated and compressed before storage
 - [ ] Calendar correctly displays with holidays
 - [x] Preview shows accurate representation (with customizable settings)
-- [ ] PDF generates correctly with all 12 months
+- [ ] PDF generates correctly with all 12 months (reusing preview infrastructure)
 - [ ] User can download PDF
-- [ ] User can replace individual images
+- [x] User can replace individual images (in Step 2, optional quick replace from preview)
 - [x] Step-by-step navigation works smoothly
 - [x] Configuration changes reflect in real-time
 - [x] Preview customization: split ratio, paper type, orientation, image fit mode, layout style
