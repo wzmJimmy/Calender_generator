@@ -29,7 +29,8 @@ calendar_generator/
 │   └── calendar.css          # Calendar-specific styles
 ├── js/
 │   ├── main.js               # Main application logic
-│   ├── calendar.js           # Calendar generation logic
+│   ├── calendar-data.js      # Calendar data generation (pure data, no DOM)
+│   ├── calendar.js           # Calendar rendering logic (uses calendar-data.js)
 │   ├── pdf-generator.js      # PDF generation functionality
 │   ├── image-handler.js      # Image upload and management
 │   ├── holiday-data.js       # Holiday integration
@@ -300,52 +301,85 @@ calendar_generator/
 ### Phase 4d: Preview Customization & Enhanced Visualization
 
 #### Step 4d.1: Preview State Management
-- [ ] Create `PreviewConfig` module:
+- [x] Create `PreviewConfig` module:
   - Split ratio (30-60%, default 40%), paper type (A4/Letter/Legal), orientation (Portrait/Landscape), image fit mode (cover/fill/contain/none), layout style (cellular/apple)
   - Expose `getState()`, `setState()`, `subscribe()` API
   - Validate all config values, provide defaults
-  - Optional: localStorage persistence
+  - localStorage persistence implemented
 
 #### Step 4d.2: Preview Configuration Panel
-- [ ] Create config panel in Step 2 (Preview):
+- [x] Create config panel in Step 2 (Preview):
   - Split-ratio slider (30-60%, default 40%, step 5%)
   - Paper type selector (A4/Letter/Legal)
   - Orientation toggle (Portrait/Landscape)
   - Image fit mode dropdown (Cover/Fill/Contain/None with descriptions)
-  - Layout style selector (Cellular/Apple)
-- [ ] Wire controls to `PreviewConfig`, update preview in real-time (debounced)
+  - Layout style selector (Cellular/Apple, default: Apple)
+- [x] Wire controls to `PreviewConfig`, update preview in real-time (debounced)
+- [x] Collapsible panel with toggle button
 
 #### Step 4d.3: Preview Aspect Ratio & Split Ratio
-- [ ] Calculate paper aspect ratios: A4 (0.707/1.414), Letter (0.773/1.294), Legal (0.607/1.647)
-- [ ] Apply aspect ratio to preview container using CSS `aspect-ratio` property
-- [ ] Apply split ratio: Image `height: ${splitRatio}%`, Calendar `height: ${100 - splitRatio}%`
-- [ ] Add paper type/orientation indicator (e.g., "A4 Portrait - 210×297mm")
-- [ ] Smooth transitions, validate bounds (30-60%)
+- [x] Calculate paper aspect ratios: A4 (0.707/1.414), Letter (0.773/1.294), Legal (0.607/1.647)
+- [x] Apply aspect ratio to preview container using CSS `aspect-ratio` property
+- [x] Apply split ratio: Image `height: ${splitRatio}%`, Calendar `height: ${100 - splitRatio}%`
+- [x] Add paper type/orientation indicator (e.g., "A4 Portrait - 210×297mm")
+- [x] Smooth transitions, validate bounds (30-60%)
+- [x] Removed padding from `preview-card__body` container
 
 #### Step 4d.4: Calendar Table as Image Rendering
-- [ ] Create `generateCalendarImage(calendarElement, options)` using html2canvas:
-  - Render to hidden container, capture as data URL, handle async/errors
-- [ ] Update preview to use calendar image:
+- [x] Create `generateCalendarImage(containerElement, options)` using html2canvas:
+  - Render to off-screen container (position: fixed, left: -10000px), capture as data URL, handle async/errors
+- [x] Update preview to use calendar image:
   - Display as `<img>` with `object-fit: fill`, control size via container (split ratio)
-- [ ] Implement caching: Cache by config hash (year, month, layout, dimensions), invalidate on changes
-- [ ] Handle loading states, errors (fallback to HTML), retry logic
+  - Show loading indicator during generation
+  - Fallback to HTML if image generation fails
+- [x] Implement caching: Cache by config hash (year, month, layout, language, startDay, country, dimensions), invalidate on changes
+- [x] Handle loading states, errors (fallback to HTML), retry logic
+- [x] Fixed Chinese language rendering issues (proper font loading, dimension calculation using scrollHeight)
+- [x] Fixed image size issues by using actual body container width and proper height measurement
 
 #### Step 4d.5: Preview UI Enhancements
-- [ ] Enhance config panel: Collapsible section, grouped controls, loading indicators
-- [ ] Add paper size indicator with dimensions
-- [ ] Optional: Preview scale indicator
-- [ ] Ensure responsive design
+- [x] Enhance config panel: Collapsible section, grouped controls, loading indicators
+- [x] Add paper size indicator with dimensions
+- [x] Ensure responsive design
 
 #### Step 4d.6: Expose Preview Config in PDF Summary
-- [ ] Update `updateConfigSummary()` in `main.js`:
+- [x] Update `updateConfigSummary()` in `main.js`:
   - Include split ratio, paper type/orientation, image fit mode, layout style
   - Group preview settings in separate section with readable labels
-- [ ] Subscribe to preview config changes, auto-refresh summary
-- [ ] Test all config combinations
+- [x] Subscribe to preview config changes, auto-refresh summary
+- [x] Test all config combinations
 
 #### Step 4d.7: Testing
-- [ ] Test split ratio, paper type/orientation, image fit modes, calendar image rendering/caching
-- [ ] Test preview config persistence, layout switching, summary updates
+- [x] Test split ratio, paper type/orientation, image fit modes, calendar image rendering/caching
+- [x] Test preview config persistence, layout switching, summary updates
+- [x] Test language changes (including Chinese) with proper cache invalidation
+- [x] Code consolidation: Extracted helper functions for DRY principles:
+  - `waitForLayout()` - Font loading and layout waiting
+  - `getCalendarDimensions()` - Dimension calculation
+  - `cleanupTempContainer()` - Container cleanup
+  - `removeLoadingIndicator()` - Indicator removal
+
+#### Additional Enhancements (Beyond Original Plan)
+- [x] Fixed Chinese language rendering issues in calendar images:
+  - Proper font loading detection using `document.fonts.ready`
+  - Extended wait times for Chinese character rendering
+  - Using `scrollHeight` for accurate height measurement
+  - Fixed image size discrepancies between languages
+- [x] Improved calendar image generation:
+  - Uses actual body container width for accurate sizing
+  - Proper dimension re-measurement after layout
+  - Better error handling with HTML fallback
+  - Cache includes language, startDay, and country for proper invalidation
+- [x] Code refactoring for maintainability:
+  - Consolidated repeated logic into helper functions
+  - Removed padding from preview-card__body for better image display
+  - Default layout style set to Apple
+- [x] Test language changes (including Chinese) with proper cache invalidation
+- [x] Code consolidation: Extracted helper functions for DRY principles:
+  - `waitForLayout()` - Font loading and layout waiting
+  - `getCalendarDimensions()` - Dimension calculation
+  - `cleanupTempContainer()` - Container cleanup
+  - `removeLoadingIndicator()` - Indicator removal
 
 ### Phase 5: PDF Generation
 
@@ -553,14 +587,14 @@ calendar_generator/
   - Step 4c.2: 1-1.5 hours (Layout system)
   - Step 4c.3: 1-1.5 hours (Apple style)
   - Step 4c.4: 0.5-1 hour (Testing)
-- **Phase 4d**: 6-8 hours (Preview Customization & Enhanced Visualization)
-  - Step 4d.1: 0.5-1 hour (State management)
-  - Step 4d.2: 1-1.5 hours (Config panel)
-  - Step 4d.3: 1-1.5 hours (Aspect ratio & split ratio)
-  - Step 4d.4: 2-2.5 hours (Calendar as image)
-  - Step 4d.5: 0.5-1 hour (UI enhancements)
-  - Step 4d.6: 0.5 hour (PDF summary)
-  - Step 4d.7: 0.5-1 hour (Testing)
+- **Phase 4d**: 6-8 hours (Preview Customization & Enhanced Visualization) ✅
+  - Step 4d.1: 0.5-1 hour (State management) ✅
+  - Step 4d.2: 1-1.5 hours (Config panel) ✅
+  - Step 4d.3: 1-1.5 hours (Aspect ratio & split ratio) ✅
+  - Step 4d.4: 2-2.5 hours (Calendar as image) ✅
+  - Step 4d.5: 0.5-1 hour (UI enhancements) ✅
+  - Step 4d.6: 0.5 hour (PDF summary) ✅
+  - Step 4d.7: 0.5-1 hour (Testing) ✅
 - **Phase 5**: 3-4 hours (PDF Generation)
 - **Phase 6**: 2-3 hours (Preview) - *Note: Mostly covered by Phase 4b/4d*
 - **Phase 7**: 1-2 hours (Image Replacement)
@@ -575,14 +609,16 @@ calendar_generator/
 - [x] User can upload 12 images (or use defaults)
 - [x] Images are validated and compressed before storage
 - [ ] Calendar correctly displays with holidays
-- [ ] Preview shows accurate representation
+- [x] Preview shows accurate representation (with customizable settings)
 - [ ] PDF generates correctly with all 12 months
 - [ ] User can download PDF
 - [ ] User can replace individual images
 - [x] Step-by-step navigation works smoothly
 - [x] Configuration changes reflect in real-time
+- [x] Preview customization: split ratio, paper type, orientation, image fit mode, layout style
+- [x] Calendar rendered as image in preview (using html2canvas)
 - [ ] Application works in major browsers
-- [ ] Code is well-organized and maintainable
+- [x] Code is well-organized and maintainable (DRY principles applied)
 
 ---
 

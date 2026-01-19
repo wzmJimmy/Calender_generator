@@ -146,8 +146,12 @@
   background: #f4ebff;
   color: #7f56d9;
   border-radius: 999px;
-  padding: 0.15rem 0.5rem;
+  padding: 0.1rem 0.5rem 0.35rem 0.5rem;
   width: fit-content;
+  line-height: 1.2;
+  display: inline-block;
+  vertical-align: baseline;
+  margin: 0;
 }
 
 .calendar-cell--muted {
@@ -191,6 +195,11 @@
 .calendar-cell--holiday .calendar-cell__holiday-tag {
   background: #d1e9ff;
   color: #026aa2;
+  padding: 0.1rem 0.5rem 0.35rem 0.5rem;
+  line-height: 1.2;
+  display: inline-block;
+  vertical-align: baseline;
+  margin: 0;
 }
 
 .calendar-layout--apple .calendar-cell--holiday {
@@ -208,6 +217,11 @@
   background: #bae6fd;
   color: #0284c7;
   border-radius: 4px;
+  padding: 0.1rem 0.5rem 0.35rem 0.5rem;
+  line-height: 1.2;
+  display: inline-block;
+  vertical-align: baseline;
+  margin: 0;
 }
 
 @media (max-width: 768px) {

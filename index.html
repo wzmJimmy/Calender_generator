@@ -23,6 +23,7 @@
   <script src="js/holiday-data.js" defer></script>
   <script src="js/config-form.js" defer></script>
   <script src="js/step-navigation.js" defer></script>
+  <script src="js/preview-config.js" defer></script>
   <script src="js/preview.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
@@ -145,6 +146,71 @@
             </div>
             <button class="btn secondary" id="download-btn" disabled>Download PDF</button>
           </header>
+          
+          <!-- Preview Configuration Panel -->
+          <div class="preview-config" id="preview-config-panel">
+            <button type="button" class="preview-config__toggle" id="preview-config-toggle" aria-expanded="false" aria-controls="preview-config-content">
+              <span>Preview Settings</span>
+              <span class="preview-config__toggle-icon" aria-hidden="true">▼</span>
+            </button>
+            <div class="preview-config__content" id="preview-config-content" aria-hidden="true">
+              <div class="preview-config__grid">
+                <label class="field">
+                  <span>Split Ratio</span>
+                  <div class="field__slider-container">
+                    <input
+                      type="range"
+                      id="preview-split-ratio"
+                      min="30"
+                      max="60"
+                      step="5"
+                      value="40"
+                      aria-label="Image to calendar split ratio"
+                    />
+                    <span class="field__slider-value" id="preview-split-ratio-value">40%</span>
+                  </div>
+                  <span class="field__hint">Controls how much space the image takes (30-60%)</span>
+                </label>
+                
+                <label class="field">
+                  <span>Paper Type</span>
+                  <select id="preview-paper-type" aria-label="Paper type">
+                    <option value="A4">A4</option>
+                    <option value="Letter">Letter</option>
+                    <option value="Legal">Legal</option>
+                  </select>
+                </label>
+                
+                <label class="field">
+                  <span>Orientation</span>
+                  <select id="preview-orientation" aria-label="Page orientation">
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                  </select>
+                </label>
+                
+                <label class="field">
+                  <span>Image Fit Mode</span>
+                  <select id="preview-image-fit" aria-label="Image fit mode">
+                    <option value="cover">Cover - Fill container, may crop</option>
+                    <option value="fill">Fill - Stretch to fill, may distort</option>
+                    <option value="contain">Contain - Fit entirely, may show gaps</option>
+                    <option value="none">None - Original size</option>
+                  </select>
+                </label>
+                
+                <label class="field">
+                  <span>Layout Style</span>
+                  <select id="preview-layout-style" aria-label="Calendar layout style">
+                    <option value="apple">Apple - Straight lines, clean</option>
+                    <option value="cellular">Cellular - Rounded borders</option>
+                  </select>
+                </label>
+              </div>
+              <div class="preview-config__indicator" id="preview-paper-indicator" aria-live="polite"></div>
+            </div>
+          </div>
+          
           <div class="preview__controls" aria-label="Month navigation">
             <button type="button" class="btn ghost" id="preview-prev" aria-label="Previous month">Previous</button>
             <label class="preview__month-selector">

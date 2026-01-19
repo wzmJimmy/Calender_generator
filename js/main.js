@@ -41,6 +41,13 @@
         // This will be implemented when preview functionality is ready
       });
     }
+    
+    // Subscribe to preview config changes
+    if (window.PreviewConfig && window.PreviewConfig.subscribe) {
+      window.PreviewConfig.subscribe(() => {
+        updateConfigSummary();
+      });
+    }
   }
 
   function setupStepNavigationListener() {
@@ -74,6 +81,37 @@
       saturday: "Saturday",
     };
 
+    // Get preview config
+    const previewConfig = window.PreviewConfig?.getState?.();
+    const imageFitLabels = {
+      cover: "Cover",
+      fill: "Fill",
+      contain: "Contain",
+      none: "None",
+    };
+    const layoutStyleLabels = {
+      cellular: "Cellular",
+      apple: "Apple",
+    };
+
+    let previewSection = "";
+    if (previewConfig) {
+      const paperDims = window.PreviewConfig?.getPaperDimensionsString?.() || "";
+      previewSection = `
+        <h3>Preview Settings</h3>
+        <dl>
+          <dt>Split Ratio:</dt>
+          <dd>${previewConfig.splitRatio}%</dd>
+          <dt>Paper Type:</dt>
+          <dd>${paperDims}</dd>
+          <dt>Image Fit Mode:</dt>
+          <dd>${imageFitLabels[previewConfig.imageFitMode] || previewConfig.imageFitMode}</dd>
+          <dt>Layout Style:</dt>
+          <dd>${layoutStyleLabels[previewConfig.layoutStyle] || previewConfig.layoutStyle}</dd>
+        </dl>
+      `;
+    }
+
     summaryEl.innerHTML = `
       <h3>Calendar Configuration Summary</h3>
       <dl>
@@ -86,6 +124,7 @@
         <dt>Language:</dt>
         <dd>${languageLabel}</dd>
       </dl>
+      ${previewSection}
     `;
   }
 
