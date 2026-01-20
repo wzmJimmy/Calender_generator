@@ -174,16 +174,19 @@
   }
 
   /**
-   * Get paper aspect ratio
+   * Get paper aspect ratio (width / height)
+   * Returns the aspect ratio for the current orientation
    */
   function getPaperAspectRatio() {
     const dims = PAPER_DIMENSIONS[state.paperType];
     if (!dims) return 0.707; // Default to A4 portrait
 
-    if (state.orientation === "landscape") {
-      return dims.height / dims.width;
-    }
-    return dims.width / dims.height;
+    // For landscape, swap width and height (width becomes the longer dimension)
+    const width = state.orientation === "landscape" ? dims.height : dims.width;
+    const height = state.orientation === "landscape" ? dims.width : dims.height;
+    
+    // CSS aspect-ratio expects width / height
+    return width / height;
   }
 
   /**

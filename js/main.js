@@ -24,11 +24,11 @@
     const generatePdfBtn = Utils.qs("#generate-pdf-btn");
 
     downloadBtn?.addEventListener("click", () => {
-      PdfGenerator.downloadDraft();
+      PdfGenerator.download();
     });
 
     generatePdfBtn?.addEventListener("click", () => {
-      handlePdfGeneration();
+      PdfGenerator.download();
     });
   }
 
@@ -128,33 +128,7 @@
     `;
   }
 
-  function handlePdfGeneration() {
-    const statusEl = Utils.qs("#download-status");
-    const generateBtn = Utils.qs("#generate-pdf-btn");
-
-    if (!statusEl || !generateBtn) return;
-
-    statusEl.textContent = "Generating PDF...";
-    statusEl.setAttribute("data-status", "loading");
-    generateBtn.disabled = true;
-
-    try {
-      PdfGenerator.downloadDraft();
-      statusEl.textContent = "PDF generated successfully!";
-      statusEl.setAttribute("data-status", "success");
-    } catch (error) {
-      console.error("[Main] PDF generation error:", error);
-      statusEl.textContent = "Error generating PDF. Please try again.";
-      statusEl.setAttribute("data-status", "error");
-    } finally {
-      generateBtn.disabled = false;
-      // Clear status after 5 seconds
-      setTimeout(() => {
-        statusEl.textContent = "";
-        statusEl.removeAttribute("data-status");
-      }, 5000);
-    }
-  }
+  // Removed handlePdfGeneration() - PdfGenerator.download() now handles all UI updates
 
   function runDependencyCheck() {
     const statusEl = Utils.qs("#dependency-status");

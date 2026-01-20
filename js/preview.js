@@ -25,32 +25,6 @@
   let previewConfigControls;
   let calendarImageCache = new Map(); // Cache for calendar images
 
-  // Wait for layout and fonts to load
-  async function waitForLayout(waitTime = 100) {
-    // Wait for fonts to load, especially important for Chinese characters
-    if (document.fonts && document.fonts.ready) {
-      await document.fonts.ready;
-    }
-    await new Promise((resolve) => setTimeout(resolve, waitTime));
-    
-    // Force a reflow
-    return new Promise((resolve) => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(resolve);
-      });
-    });
-  }
-
-  // Get accurate calendar dimensions
-  function getCalendarDimensions(calendarElement) {
-    return {
-      width: calendarElement.offsetWidth || 400,
-      height: Math.max(
-        calendarElement.scrollHeight || calendarElement.offsetHeight,
-        calendarElement.offsetHeight || 600
-      ),
-    };
-  }
 
   // Clean up temporary container
   function cleanupTempContainer(container) {
@@ -319,8 +293,9 @@
     const card = document.createElement("article");
     card.className = "preview-card";
     
-    // Apply aspect ratio to card
-    card.style.aspectRatio = `${1 / aspectRatio}`;
+    // Apply aspect ratio to card (CSS aspect-ratio expects width/height)
+    // aspectRatio from getPaperAspectRatio() is already width/height
+    card.style.aspectRatio = `${aspectRatio}`;
 
     // Add image container with split ratio
     const imageContainer = document.createElement("div");
@@ -400,7 +375,7 @@
       previewGridEl.appendChild(card);
       
       // Wait for layout to calculate body width
-      await waitForLayout(50);
+      await Utils.waitForLayout(50);
       const bodyWidth = body.offsetWidth || 400;
       
       // Create temporary container with the actual body width
@@ -419,10 +394,10 @@
       tempMeasureContainer.appendChild(measureCalendar);
       
       // Wait for layout and fonts
-      await waitForLayout(100);
+      await Utils.waitForLayout(100);
       
       // Get initial dimensions
-      let { height: calendarHeight } = getCalendarDimensions(measureCalendar);
+      let { height: calendarHeight } = Utils.getCalendarDimensions(measureCalendar);
       
       // Set explicit dimensions to match actual content
       tempMeasureContainer.style.height = `${calendarHeight}px`;
@@ -430,8 +405,8 @@
       measureCalendar.style.width = "100%";
       
       // Wait and re-measure after final layout
-      await waitForLayout(50);
-      calendarHeight = getCalendarDimensions(measureCalendar).height;
+      await Utils.waitForLayout(50);
+      calendarHeight = Utils.getCalendarDimensions(measureCalendar).height;
       tempMeasureContainer.style.height = `${calendarHeight}px`;
       
       // Generate calendar image and replace HTML with image
@@ -500,7 +475,7 @@
     }
 
     // Get initial dimensions from the container
-    const { width: initialWidth, height: initialHeight } = getCalendarDimensions(containerElement);
+    const { width: initialWidth, height: initialHeight } = Utils.getCalendarDimensions(containerElement);
 
     // Create cache key (include dimensions and config that affect rendering)
     const cacheKey = JSON.stringify({
@@ -521,14 +496,14 @@
 
     try {
       // Wait for fonts and layout to be ready
-      await waitForLayout(300);
+      await Utils.waitForLayout(300);
       
       // Re-measure after waiting (dimensions might have changed)
       const calendarElement = containerElement.querySelector('.calendar-month') || containerElement.firstElementChild;
       const finalWidth = containerElement.offsetWidth || initialWidth;
       const finalHeight = calendarElement 
-        ? getCalendarDimensions(calendarElement).height
-        : getCalendarDimensions(containerElement).height;
+        ? Utils.getCalendarDimensions(calendarElement).height
+        : Utils.getCalendarDimensions(containerElement).height;
 
       // Generate canvas with proper dimensions
       const canvas = await window.html2canvas(containerElement, {
